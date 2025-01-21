@@ -70,13 +70,6 @@ func (r *Router) setupRoutes(authClient client.AuthClient, csrfStore *middleware
 			public := v1.Group("")
 			{
 				public.GET("/health", r.HealthCheck)
-
-				// Community routes
-				communityRepo := repository.NewCommunityRepository(r.db)
-				communityService := service.NewCommunityService(communityRepo)
-				communityHandler := handler.NewCommunityHandler(communityService)
-				communityHandler.RegisterRoutes(public)
-
 			}
 
 			// Protected routes (require authentication)
@@ -93,10 +86,10 @@ func (r *Router) setupRoutes(authClient client.AuthClient, csrfStore *middleware
 				userHandler.RegisterRoutes(protected)
 
 				// Community routes
-				//communityRepo := repository.NewCommunityRepository(r.db)
-				// := service.NewCommunityService(communityRepo)
-				//communityHandler := handler.NewCommunityHandler(communityService)
-				//communityHandler.RegisterRoutes(protected)
+				communityRepo := repository.NewCommunityRepository(r.db)
+				communityService := service.NewCommunityService(communityRepo)
+				communityHandler := handler.NewCommunityHandler(communityService)
+				communityHandler.RegisterRoutes(protected)
 
 				// Building routes
 				//buildingRepo := repository.NewBuildingRepository(r.db)

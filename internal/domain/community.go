@@ -24,7 +24,7 @@ type Community struct {
 	UpdatedAt      time.Time      `json:"updated_at"`                             // Update timestamp
 	DeletedAt      gorm.DeletedAt `json:"-" gorm:"index"`                         // Soft delete timestamp
 	OrganizationID uint           `json:"organization_id" gorm:"not null"`        // Organization ID (required)
-	BranchID       string         `json:"branch_id" gorm:"type:uuid;not null"`    // Branch ID (UUID, required)
+	BranchID       string         `json:"branch_id" gorm:"not null"`              // Branch ID (string, required)
 }
 
 // Hook to set default values before creating a record

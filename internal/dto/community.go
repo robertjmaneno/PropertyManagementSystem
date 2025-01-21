@@ -9,11 +9,9 @@ import (
 
 // CreateCommunityRequest represents the request body for creating a community
 type CreateCommunityRequest struct {
-	Name           string `json:"name" binding:"required"`
-	Address        string `json:"address" binding:"required"`
-	Description    string `json:"description,omitempty"`
-	OrganizationID uint   `json:"organization_id" binding:"required"`
-	BranchID       string `json:"branch_id" binding:"required"`
+	Name        string `json:"name" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	Address     string `json:"address" binding:"required"`
 }
 
 // UpdateCommunityRequest represents the request body for updating a community
@@ -46,12 +44,10 @@ type ListCommunitiesResponse struct {
 // ToCommunity converts a CreateCommunityRequest to a domain.Community
 func (r *CreateCommunityRequest) ToCommunity() *domain.Community {
 	return &domain.Community{
-		ID:             uuid.New().String(),
-		Name:           r.Name,
-		Address:        r.Address,
-		Description:    r.Description,
-		OrganizationID: r.OrganizationID,
-		BranchID:       r.BranchID,
+		ID:          uuid.New().String(),
+		Name:        r.Name,
+		Address:     r.Address,
+		Description: r.Description,
 	}
 }
 

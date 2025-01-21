@@ -60,19 +60,14 @@ definitions:
     properties:
       address:
         type: string
-      branch_id:
-        type: string
       description:
         type: string
       name:
         type: string
-      organization_id:
-        type: integer
     required:
     - address
-    - branch_id
+    - description
     - name
-    - organization_id
     type: object
   dto.CreateUnitRequest:
     properties:

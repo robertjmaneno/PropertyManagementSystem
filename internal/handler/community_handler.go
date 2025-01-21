@@ -91,8 +91,9 @@ func (h *CommunityHandler) Create(c *gin.Context) {
 	}
 
 	community := req.ToCommunity()
-	community.OrganizationID = tenancy.OrganizationID
-	community.BranchID = tenancy.BranchID
+	// Remove these fields from the request DTO since they should only come from tenancy context
+	community.OrganizationID = tenancy.OrganizationID // Use the value from tenancy context
+	community.BranchID = tenancy.BranchID             // Use the value from tenancy context
 
 	if err := h.communityService.Create(c.Request.Context(), community); err != nil {
 		response.SendError(c, http.StatusInternalServerError, err)

@@ -2053,15 +2053,11 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "address",
-                "branch_id",
-                "name",
-                "organization_id"
+                "description",
+                "name"
             ],
             "properties": {
                 "address": {
-                    "type": "string"
-                },
-                "branch_id": {
                     "type": "string"
                 },
                 "description": {
@@ -2069,9 +2065,6 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
-                },
-                "organization_id": {
-                    "type": "integer"
                 }
             }
         },
