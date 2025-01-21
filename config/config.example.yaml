@@ -1,0 +1,64 @@
+server:
+  port: 8080
+  host: "0.0.0.0"
+  timeoutSeconds: 30
+  shutdownTimeoutSeconds: 5
+
+database:
+  host: "localhost"
+  port: 5432
+  name: "myapp"
+  user: "postgres"
+  password: "postgres"
+  sslMode: "disable"
+  maxConnections: 100
+  maxIdleConnections: 10
+  connMaxLifetime: "1h"
+
+auth:
+  jwtSecret: "your-secret-key"
+  jwtExpirationHours: 24
+  refreshTokenDays: 7
+  service_url: "https://auth.example.com"
+  permissions_url: "https://permissions.lyvepulse.us/permissions"
+  username: "service-account"
+  password: "your-service-account-password"
+  timeout: "10s"
+
+redis:
+  enabled: false
+  host: "localhost"
+  port: 6379
+  password: ""
+  db: 0
+
+api:
+  rateLimit:
+    requests: 100
+    duration: "1m"
+  cors:
+    allowedOrigins:
+      - "*"
+    allowedMethods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    allowedHeaders:
+      - "Authorization"
+      - "Content-Type"
+
+logging:
+  level: "debug"
+  format: "json"
+  output: "stdout"
+
+features:
+  swagger: true
+  metrics: true
+  tracing: false
+
+cache:
+  enabled: true
+  ttl: "15m" 

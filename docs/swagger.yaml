@@ -1,0 +1,1583 @@
+basePath: /api/v1
+definitions:
+  dto.BuildingResponse:
+    properties:
+      address:
+        type: string
+      branch_id:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      organization_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  dto.CommunityResponse:
+    properties:
+      address:
+        type: string
+      branch_id:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      organization_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  dto.CreateBuildingRequest:
+    properties:
+      address:
+        type: string
+      branch_id:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      organization_id:
+        type: integer
+    required:
+    - address
+    - branch_id
+    - name
+    - organization_id
+    type: object
+  dto.CreateCommunityRequest:
+    properties:
+      address:
+        type: string
+      branch_id:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      organization_id:
+        type: integer
+    required:
+    - address
+    - branch_id
+    - name
+    - organization_id
+    type: object
+  dto.CreateUnitRequest:
+    properties:
+      bathrooms:
+        type: number
+      branch_id:
+        type: string
+      description:
+        type: string
+      organization_id:
+        type: integer
+      rooms:
+        type: integer
+      square_feet:
+        type: integer
+      unit_number:
+        type: string
+    required:
+    - bathrooms
+    - branch_id
+    - organization_id
+    - rooms
+    - square_feet
+    - unit_number
+    type: object
+  dto.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    type: object
+  dto.ListBuildingsResponse:
+    properties:
+      buildings:
+        items:
+          $ref: '#/definitions/dto.BuildingResponse'
+        type: array
+      total:
+        type: integer
+    type: object
+  dto.ListCommunitiesResponse:
+    properties:
+      communities:
+        items:
+          $ref: '#/definitions/dto.CommunityResponse'
+        type: array
+      total:
+        type: integer
+    type: object
+  dto.ListUnitsResponse:
+    properties:
+      total:
+        type: integer
+      units:
+        items:
+          $ref: '#/definitions/dto.UnitResponse'
+        type: array
+    type: object
+  dto.ListUsersResponse:
+    properties:
+      total:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/dto.UserResponse'
+        type: array
+    type: object
+  dto.UnitResponse:
+    properties:
+      bathrooms:
+        type: number
+      branch_id:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      organization_id:
+        type: integer
+      rooms:
+        type: integer
+      square_feet:
+        type: integer
+      unit_number:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.UpdateBuildingRequest:
+    properties:
+      address:
+        type: string
+      branch_id:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      organization_id:
+        type: integer
+    type: object
+  dto.UpdateCommunityRequest:
+    properties:
+      address:
+        type: string
+      branch_id:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      organization_id:
+        type: integer
+    type: object
+  dto.UpdateUnitRequest:
+    properties:
+      bathrooms:
+        type: number
+      branch_id:
+        type: string
+      description:
+        type: string
+      organization_id:
+        type: integer
+      rooms:
+        type: integer
+      square_feet:
+        type: integer
+      unit_number:
+        type: string
+    type: object
+  dto.UpdateUserRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+    type: object
+  dto.UserResponse:
+    properties:
+      branch_id:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      organization_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a template API server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Template API
+  version: "1.0"
+paths:
+  /buildings:
+    get:
+      description: Retrieve a list of buildings with pagination and sorting support.
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: 'Page number (default: 1)'
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: 'Number of items per page (default: 10)'
+        in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      - description: 'Sort fields (format: field1:asc,field2:desc) - Available fields:
+          first_name, last_name, email, created_at'
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of buildings with pagination information
+          schema:
+            $ref: '#/definitions/dto.ListBuildingsResponse'
+        "400":
+          description: Invalid input parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List buildings
+      tags:
+      - building
+    post:
+      consumes:
+      - application/json
+      description: Create a new building with the provided details.
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Building information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateBuildingRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created building
+          schema:
+            $ref: '#/definitions/dto.BuildingResponse'
+        "400":
+          description: Invalid input, bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create building
+      tags:
+      - building
+  /buildings/{id}:
+    delete:
+      description: Delete a building by its ID
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Building ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid request parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Building not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete building
+      tags:
+      - building
+    get:
+      description: Retrieve a building's details using its ID
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: building ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Building details
+          schema:
+            $ref: '#/definitions/dto.BuildingResponse'
+        "400":
+          description: Invalid request parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Building not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get building by ID
+      tags:
+      - building
+    put:
+      consumes:
+      - application/json
+      description: Update a building's details by its ID
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Building ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Building information to be updated
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateBuildingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated Building details
+          schema:
+            $ref: '#/definitions/dto.BuildingResponse'
+        "400":
+          description: Invalid request parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Building not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update building
+      tags:
+      - building
+  /buildings/search:
+    get:
+      description: Search for a building by name or email with optional case sensitivity,
+        pagination, and sorting.
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Search query (e.g., building name )
+        in: query
+        name: search
+        required: true
+        type: string
+      - description: 'Page number (default: 1)'
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: 'Case sensitive search (default: false)'
+        in: query
+        name: case_sensitive
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of buildings matching search criteria with pagination
+            info
+          schema:
+            $ref: '#/definitions/dto.ListBuildingsResponse'
+        "400":
+          description: Invalid input parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Search building
+      tags:
+      - building
+  /communities:
+    get:
+      description: Retrieve a list of communities with pagination and sorting support.
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: 'Page number (default: 1)'
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: 'Number of items per page (default: 10)'
+        in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      - description: 'Sort fields (format: field1:asc,field2:desc) - Available fields:
+          first_name, last_name, email, created_at'
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of communities with pagination information
+          schema:
+            $ref: '#/definitions/dto.ListCommunitiesResponse'
+        "400":
+          description: Invalid input parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List communities
+      tags:
+      - community
+    post:
+      consumes:
+      - application/json
+      description: Create a new community with the provided details.
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Community information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCommunityRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created community
+          schema:
+            $ref: '#/definitions/dto.CommunityResponse'
+        "400":
+          description: Invalid input, bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create community
+      tags:
+      - community
+  /communities/{id}:
+    delete:
+      description: Delete a community by its ID
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Community ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid request parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Community not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete community
+      tags:
+      - community
+    get:
+      description: Retrieve a community's details using its ID
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Community ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Community details
+          schema:
+            $ref: '#/definitions/dto.CommunityResponse'
+        "400":
+          description: Invalid request parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Community not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get community by ID
+      tags:
+      - community
+    put:
+      consumes:
+      - application/json
+      description: Update a community's details by its ID
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Community ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Community information to be updated
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCommunityRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated community details
+          schema:
+            $ref: '#/definitions/dto.CommunityResponse'
+        "400":
+          description: Invalid request parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Community not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update community
+      tags:
+      - community
+  /communities/search:
+    get:
+      description: Search for a community by name or email with optional case sensitivity,
+        pagination, and sorting.
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Search query (e.g., community name )
+        in: query
+        name: search
+        required: true
+        type: string
+      - description: 'Page number (default: 1)'
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: 'Case sensitive search (default: false)'
+        in: query
+        name: case_sensitive
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of communities matching search criteria with pagination
+            info
+          schema:
+            $ref: '#/definitions/dto.ListCommunitiesResponse'
+        "400":
+          description: Invalid input parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Search community
+      tags:
+      - community
+  /health:
+    get:
+      description: Get the health status of the API
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Health check endpoint
+      tags:
+      - health
+  /units:
+    get:
+      description: Retrieve a list of units with pagination and sorting support.
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: 'Page number (default: 1)'
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: 'Number of items per page (default: 10)'
+        in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      - description: 'Sort fields (format: field1:asc,field2:desc) - Available fields:
+          unit_number, name, created_at'
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of units with pagination information
+          schema:
+            $ref: '#/definitions/dto.ListUnitsResponse'
+        "400":
+          description: Invalid input parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List units
+      tags:
+      - unit
+    post:
+      consumes:
+      - application/json
+      description: Create a new unit with the provided details.
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Unit information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUnitRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created unit
+          schema:
+            $ref: '#/definitions/dto.UnitResponse'
+        "400":
+          description: Invalid input, bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create unit
+      tags:
+      - unit
+  /units/{id}:
+    delete:
+      description: Delete a unit by its ID
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Unit ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid request parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Unit not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete unit
+      tags:
+      - unit
+    get:
+      description: Retrieve a unit's details using its ID
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: unit ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Unit details
+          schema:
+            $ref: '#/definitions/dto.UnitResponse'
+        "400":
+          description: Invalid request parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Unit not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get unit by ID
+      tags:
+      - unit
+    put:
+      consumes:
+      - application/json
+      description: Update a unit's details by its ID
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Unit ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Unit information to be updated
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUnitRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated Unit details
+          schema:
+            $ref: '#/definitions/dto.UnitResponse'
+        "400":
+          description: Invalid request parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Unit not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update unit
+      tags:
+      - unit
+  /users:
+    get:
+      description: Get a list of all users with pagination and sorting
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: 'Page number (default: 1)'
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: 'Number of items per page (default: 10)'
+        in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      - description: 'Sort fields (format: field1:asc,field2:desc) - Available fields:
+          first_name, last_name, email, created_at'
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListUsersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: User information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      description: Delete a user by their ID
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete user
+      tags:
+      - users
+    get:
+      description: Get a user's information by their ID
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update a user's information
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update user
+      tags:
+      - users
+  /users/search:
+    get:
+      description: Search users by name or email
+      parameters:
+      - description: Organization ID
+        in: header
+        name: Organization-ID
+        required: true
+        type: string
+      - description: Branch ID
+        in: header
+        name: Branch-ID
+        required: true
+        type: string
+      - description: Search query
+        in: query
+        name: search
+        required: true
+        type: string
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Case sensitive search (default: false)'
+        in: query
+        name: case_sensitive
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListUsersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Search users
+      tags:
+      - users
+schemes:
+- http
+- https
+security:
+- BearerAuth: []
+securityDefinitions:
+  BearerAuth:
+    description: Enter your bearer token in the format **Bearer &lt;token&gt;**
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

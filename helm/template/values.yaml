@@ -1,0 +1,122 @@
+replicaCount: 1
+
+image:
+  repository: yourusername/go-clean-template
+  tag: latest
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Application configuration that maps to Viper
+config:
+  server:
+    port: 8080
+    host: "0.0.0.0"
+    timeoutSeconds: 30
+    shutdownTimeoutSeconds: 5
+
+  database:
+    host: "{{ .Release.Name }}-postgresql"  # Uses Helm templating
+    port: 5432
+    name: "myapp"
+    user: "postgres"
+    # Password will be taken from secret
+    sslMode: "disable"
+    maxConnections: 100
+    maxIdleConnections: 10
+    connMaxLifetime: "1h"
+
+  auth:
+    jwtExpirationHours: 24
+    refreshTokenDays: 7
+    # Secret will be taken from secret
+
+  redis:
+    enabled: true
+    host: "{{ .Release.Name }}-redis"  # Uses Helm templating
+    port: 6379
+    db: 0
+    # Password will be taken from secret
+
+  api:
+    rateLimit:
+      requests: 100
+      duration: "1m"
+    cors:
+      allowedOrigins:
+        - "*"
+      allowedMethods:
+        - "GET"
+        - "POST"
+        - "PUT"
+        - "DELETE"
+        - "OPTIONS"
+      allowedHeaders:
+        - "Authorization"
+        - "Content-Type"
+
+  logging:
+    level: "info"
+    format: "json"
+    output: "stdout"
+
+  features:
+    swagger: true
+    metrics: true
+    tracing: false
+
+  cache:
+    enabled: true
+    ttl: "15m"
+
+# Dependencies configuration
+postgresql:
+  enabled: true
+  auth:
+    username: postgres
+    database: myapp
+    existingSecret: app-secrets
+    secretKeys:
+      adminPasswordKey: postgresql-password
+
+redis:
+  enabled: true
+  auth:
+    existingSecret: app-secrets
+    secretKeys:
+      adminPasswordKey: redis-password 

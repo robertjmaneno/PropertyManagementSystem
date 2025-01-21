@@ -1,0 +1,27 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a template API server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Template API
+  version: "1.0"
+paths: {}
+schemes:
+- http
+- https
+security:
+- BearerAuth: []
+securityDefinitions:
+  BearerAuth:
+    description: Enter your bearer token in the format **Bearer &lt;token&gt;**
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
