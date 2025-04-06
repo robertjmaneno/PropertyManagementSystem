@@ -1,4 +1,4 @@
-# Property Management systm following Clean Architecture
+# Property Management system following Clean Architecture
 
 
 ## 🌟 Features
