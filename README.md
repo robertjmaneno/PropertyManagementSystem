@@ -1,6 +1,5 @@
-# Go Clean Architecture Template
+# Property Management systm following Clean Architecture
 
-A production-ready template for building scalable web applications in Go, following clean architecture principles.
 
 ## 🌟 Features
 
